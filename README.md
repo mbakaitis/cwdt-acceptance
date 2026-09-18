@@ -122,7 +122,7 @@ Steps 1–6 need no Cloudflare account and no deployment — you can stop there 
 
                ![sample secret modal](docs/images/README-md-add-secret-dialogue-box.png)
 
-         - in the *same* place, add the Discord secrets the registration step reads. These belong to the **environment**, not the repository, so that `non-prod` and `production` resolve to different Discord applications:
+         - next, add the Discord secrets the registration step reads. These belong to the **environment**, not the repository, so that `non-prod` and `production` resolve to different Discord applications:
 
             - `DISCORD_TOKEN` and `DISCORD_APPLICATION_ID` on both environments
             - `DISCORD_GUILD_ID` on `non-prod` only — production registers globally
