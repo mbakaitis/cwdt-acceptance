@@ -202,6 +202,26 @@ Do *not* connect a Worker to this repository through the Cloudflare dashboard's 
 
 That is a separate auto-deploy mechanism that bypasses this workflow's environment approvals and test gates. See [Do not also connect the repository in the Cloudflare dashboard](docs/using-this-template.md#do-not-also-connect-the-repository-in-the-cloudflare-dashboard).
 
+### "Missing required secrets" in CI is a warning, not the failure
+
+A CI run's test output contains one of these per test file, and it is expected noise:
+
+```
+Using secrets defined in process.env
+▲ [WARNING] Missing required secrets: DISCORD_PUBLIC_KEY, DISCORD_APPLICATION_ID, DISCORD_TOKEN.
+```
+
+`vitest.config.js` points the Workers test pool at `wrangler.jsonc`, so every test file boots a Wrangler dev-style environment that reads `secrets.required` and warns about names it cannot find locally. The `npm test` step has no Discord values in its environment by design — the tests sign fixtures with a throwaway Ed25519 keypair generated per run, and the `register:*` steps get their own credentials. Locally the line reads `Using secrets defined in .dev.vars` instead. Either way the tests pass.
+
+Because the warning is loud, repeats, and names real secrets, it is easy to mistake it for the cause when a run exits non-zero. It never is. Scroll to the end of the log and read the summary instead:
+
+- `# fail 1` with a `✖ failing tests:` block — a test is genuinely failing. The `node --test` contract suite prints its failures only at the very end, long after the last warning.
+- The `wrangler-action` step failing with missing secrets — that is the deploy-time check, and it validates against the **environment's** Worker (`-non-prod` or `-production`), not the top-level name. Secrets set on the wrong Worker are invisible to it.
+
+### `.dev.vars.example` is tracked on purpose
+
+`.gitignore` ignores `.dev.vars` and un-ignores `.dev.vars.example`, and a contract test asserts both, plus that every value in the example file is an obvious `replace-me` placeholder. Deleting the example file to keep secrets out of the repository is the wrong instinct — it holds no secrets, and the test suite fails without it. Keep it, and keep its values placeholders.
+
 ## Documentation
 
 | Document | Read it when |
