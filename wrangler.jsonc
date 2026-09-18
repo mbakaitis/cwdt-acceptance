@@ -1,25 +1,37 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "cloudflare-workers-discord-template",
+  "name": "cwdt-acceptance",
   "main": "src/index.js",
   "compatibility_date": "2026-08-18",
   "observability": {
     "enabled": true
   },
   "secrets": {
-    "required": ["DISCORD_PUBLIC_KEY", "DISCORD_APPLICATION_ID", "DISCORD_TOKEN"]
+    "required": [
+      "DISCORD_PUBLIC_KEY",
+      "DISCORD_APPLICATION_ID",
+      "DISCORD_TOKEN"
+    ]
   },
   "env": {
     "non-prod": {
-      "name": "cloudflare-workers-discord-template-non-prod",
+      "name": "cwdt-acceptance-non-prod",
       "secrets": {
-        "required": ["DISCORD_PUBLIC_KEY", "DISCORD_APPLICATION_ID", "DISCORD_TOKEN"]
+        "required": [
+          "DISCORD_PUBLIC_KEY",
+          "DISCORD_APPLICATION_ID",
+          "DISCORD_TOKEN"
+        ]
       }
     },
     "production": {
-      "name": "cloudflare-workers-discord-template-production",
+      "name": "cwdt-acceptance-production",
       "secrets": {
-        "required": ["DISCORD_PUBLIC_KEY", "DISCORD_APPLICATION_ID", "DISCORD_TOKEN"]
+        "required": [
+          "DISCORD_PUBLIC_KEY",
+          "DISCORD_APPLICATION_ID",
+          "DISCORD_TOKEN"
+        ]
       }
     }
   }
